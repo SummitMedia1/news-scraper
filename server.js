@@ -1,123 +1,74 @@
 
 // Dependencies and Scraping Tools
-const request = require('request');
-const cheerio = require('cheerio');
-const express = require('express');
-const mongojs = require('mongojs');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const path = require('path');
+var request = require('request');
+var cheerio = require('cheerio');
+var express = require('express');
+var mongojs = require('mongojs');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+var path = require('path');
 
-// Required JS file dependencies
-var Note = require('./models/note.js');
-var Article = require('./models/article.js');
+// // Required JS file dependencies
+// var Note = require('./models/note.js');
+// var Article = require('./models/article.js');
 
 // Initialize Express
-const app = express();
-const db = mongojs('scraper', ['webdevdata']);
+var app = express();
 
-// Establish using BodyParser in app
-app.use(bodyParser.urlencoded({ extended: false }));
+// Database configuration
+var databaseURL = 'scraper';
+var collections = ['scrapedData'];
 
-// Set Public as a static directory
-app.use(express.static('public'));
 
-// Set handlebars
-const exphbs = require('express-handlebars')
-
-app.engine('handlebars', exphbs({
-  defaultLayout: 'main',
-}));
-
-app.set('view engine', 'handlebars');
-
-// GET data from the New York Times
-  request('https://www.nytimes.com/',
-  function(error, response, html) {
-// Initialize $ variable with the page's DOM
-  var $ = cheerio.load(html);
-// Iterate over each 'div.top-matter' element (each post on the page)
-  $('div.top-matter').each(function(i, element) {
-
-    // Grab title
-    var title = $(element).find('a.title').text();
-
-    // Grab comment count
-    var comments = $(element).find('a.comments').text();
-    // This regex matches the number "5" in "5 comments"
-    var match = comments.match(/(\d+) comment/);
-    comments = match ? match[1] : 0;
-
-    // Grab author
-    var author = $(element).find('a.author').text();
-
-    // Grab timestamps
-    var timestampHuman = $(element).find('time.live-timestamp').text();
-    var timestampMachine = $(element).find('time.live-timestamp').attr('datetime');
-
-    // Create data object
-    var post = {
-        title: title,
-        author: author,
-        commentCount: comments,
-        timestamp: timestampMachine,
-        timestampDisplay: timestampHuman
-    };
-    console.log(JSON.stringify(post, null, 2));
-
-    // Insert into database
-    db.webdevdata.insert(post);
-    console.log('record inserted!');
+// Connect mongojs configuration to the constructor
+var db = mongojs(databaseURL, collections);
+db.on('error', function(error){
+  console.log('Database error: ', error);
 });
 
-//db.close();
+// Test route to make sure its up and working properly
+
+app.get('/', function(req, res){
+  res.send('Hello world');
 });
 
-// Data route
-app.get('/api/posts', (req, res) => {
-    // Get posts from db
-    db.webdevdata.find({}).sort({ title: -1 }, (err, posts) => res.json(posts));
+app.get('/all', function(req, res){
+  db.scrapedData.find({}, function(error, found){
+    if(error){
+      console.log(error);
+    } else {
+      {
+        res.json(found);
+      }
+    }
+  });
 });
 
-app.get('/api/posts/:id', (req, res) => {
-    // Get posts from db
-    db.webdevdata.findOne({ _id: mongojs.ObjectId(req.params.id) },
-        (err, posts) => res.json(posts));
-});
+app.get('/scrape', function(req, res){
+  // GET data from the New York Times
+    request('https://www.washingtonpost.com/', function(error, response, html){
+      var $ = cheerio.load(html);
 
-app.post('/api/posts/:id/downvote', (req, res) => {
-    // Get posts from db
-    db.webdevdata.findOne({ _id: mongojs.ObjectId(req.params.id) },
-        (err, post) => {
-            if (!post.score)
-                post.score = -1;
-            else
-                post.score--;
-            console.log(post);
-            db.webdevdata.update({ _id: mongojs.ObjectId(req.params.id) }, post,
-                () => {
-                    db.webdevdata.findOne({ _id: mongojs.ObjectId(req.params.id) },
-                        (err, post) => res.json(post));
-                });
-        });
-});
+      $('.headline').each(function(i, element){
+        var headline = $(this).children('a').text();
+        var link = $(this).children('a').attr('href');
 
-app.post('/api/posts/:id/upvote', (req, res) => {
-    // Get posts from db
-    db.webdevdata.findOne({ _id: mongojs.ObjectId(req.params.id) },
-        (err, post) => {
-            if (!post.score)
-                post.score = 1;
-            else
-                post.score++;
-            console.log(post);
-            db.webdevdata.update({ _id: mongojs.ObjectId(req.params.id) }, post,
-                () => {
-                    db.webdevdata.findOne({ _id: mongojs.ObjectId(req.params.id) },
-                        (err, post) => res.json(post));
-                });
-        });
+          if (headline && link){
+            db.scrapedData.save({
+              title: headline,
+              link: link
+            },
+            function(error, saved){
+              if(error){
+                console.log(error);
+              } else {
+                console.log(saved);
+              }
+          });
+          }
+      });
+    });
+    res.send('Scrape is complete.');
 });
-
 // Start express server
 app.listen(8080, () => console.log('Example app listening on port 8080!'));
