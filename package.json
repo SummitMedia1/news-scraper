@@ -1,0 +1,29 @@
+{
+  "name": "11_15",
+  "version": "1.0.0",
+  "description": "In this assignment we create a web app that lets users view and leave comments on the latest news by scraping news from another site. We'll use Mongoose and Cheerio to scrape.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "mongojs": "^2.4.1",
+    "mongoose": "^4.13.5",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SummitMedia1/news-scraper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SummitMedia1/news-scraper/issues"
+  },
+  "homepage": "https://github.com/SummitMedia1/news-scraper#readme"
+}
