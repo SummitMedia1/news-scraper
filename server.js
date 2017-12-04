@@ -34,8 +34,10 @@ var databaseURL = 'scraper';
 var collections = ['scrapedData'];
 
 // Connect mongojs configuration to the constructor
-mongoose.connect("mongodb://localhost/scrape")
+mongoose.connect("mongodb://dbuser@ds129796.mlab.com:29796/heroku_pvd5mcwh")
+// mongoose.connect("mongodb://localhost/scrape")
 // var db = mongojs(databaseURL, collections);
+//
 const db = mongoose.connection;
 db.on('error', function(error){
   console.log("Database error: ", error);
