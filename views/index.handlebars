@@ -1,0 +1,44 @@
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:700" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<!--Homepage-->
+<div class="container-fluid">
+    <div class="col-sm-12 jumbotron" style="border-bottom-left-radius: 120px">
+        <div class="text-center" style="padding-top: 20px">
+
+          <img class="wplogo" src="https://upload.wikimedia.org/wikipedia/commons/9/93/The_Logo_of_The_Washington_Post_Newspaper.svg" width="50%" alt="The Washington Post"/>
+          <h2 style="font-size: 32px; letter-spacing: .2rem">Sports Edition News Scaper</h2>
+          <h5 style="padding-top: 10px" id="dateTime">Date</h5>
+        </div>
+
+    </div>
+    <div class="col-sm-8 col-sm-offset-2">
+            {{#each articles}}
+            <div class="panel panel-default" style="border-bottom-left-radius: 34px; border-bottom-right-radius: 15px; padding-bottom: 10px">
+                <div class="panel-heading" id="articleHeadline">
+                    <h2 style="font-family: Source Serif Pro, serif; text-transform: uppercase; letter-spacing: .08rem; padding-top: 20px; padding-left: 20px">{{headline}}.</h2>
+                </div>
+                <div class="panel-body" id="articleSummary">
+                    <h2 style="font-family: HelveticaNeue-Thin; letter-spacing: .08rem; padding-left: 20px">{{summary}}</h2>
+                    <div class="row">
+
+                    </div>
+                    <div class="col-sm-1" align="right" style="text-align: right; padding: 20px">
+                      <i class="fa fa-eye fa-3x" aria-hidden="true" style="text-align: right"></i>
+                    </div>
+                    <div class="col-sm-11">
+                      <a href={{link}} id="articleHrefs" target="_blank"><h4 style="font-style: italic; padding: 10px; display: inline-block">Read the full article here:<br />{{link}}</h4></a>
+                    </div>
+                    <br><br>
+                    <button type="button" class="btn btn-success save" style="margin-left: 20px">Save article</button>
+                </div>
+            </div>
+            {{/each}}
+    </div>
+
+    <script>
+    var d = new Date();
+    document.getElementById("dateTime").innerHTML = d;
+    </script>
