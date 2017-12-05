@@ -29,13 +29,13 @@ var exphbs = require('express-handlebars');
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-// Database configuration
-var databaseURL = 'scraper';
-var collections = ['scrapedData'];
+// // Database configuration
+// var databaseURL = 'scraper';
+// var collections = ['scrapedData'];
 
 // Connect mongojs configuration to the constructor
-mongoose.connect("mongodb://dbuser@ds129796.mlab.com:29796/heroku_pvd5mcwh")
-// mongoose.connect("mongodb://localhost/scrape")
+mongoose.connect("mongodb://@ds129796.mlab.com:29796/heroku_pvd5mcwh/db")
+// mongoose.connect("mongodb://localhost/scrape/")
 // var db = mongojs(databaseURL, collections);
 //
 const db = mongoose.connection;
@@ -65,15 +65,15 @@ app.get('/scrape', function(req, res){
         var headline = $(element).find('h3').text().trim();
         var link = $(element).find('h3').children('a').attr('href');
         var summary = $(element).find('.story-description').children('p').text().trim();
-
-
+        var author = $(element).find('.story-list-meta-social').text();
         // Data object
         var post = {
             headline: headline,
             link: link,
-            summary: summary
+            summary: summary,
+            author: author
         };
-        console.log(JSON.stringify(post, null, 2));
+        console.log(JSON.stringify(post, null, 4));
 
         // Insert into database
         Article.create(post)
