@@ -66,15 +66,17 @@ app.get('/scrape', function(req, res){
         var headline = $(element).find('h3').text().trim();
         var link = $(element).find('h3').children('a').attr('href');
         var summary = $(element).find('.story-description').children('p').text().trim();
-        // var author = $(element).find('.story-list-meta-social').text();
+        var author = $(element).find('li').children('.byline');
         // Data object
         var post = {
             headline: headline,
             link: link,
             summary: summary,
-            // author: author
+            author: author
         };
         console.log(JSON.stringify(post, null, 4));
+        console.log(summary);
+
 
         // Insert into database
         Article.create(post)

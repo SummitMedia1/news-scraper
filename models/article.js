@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
         headline: String,
         link: String,
         summary: String,
-        // author: String
+        author: String
     });
 
 var Article = mongoose.model('Article', ArticleSchema);
