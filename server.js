@@ -34,7 +34,7 @@ app.set('view engine', 'handlebars');
 // var collections = ['scrapedData'];
 
 // Connect mongojs configuration to the constructor
-mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds111771.mlab.com:11771/heroku_fgqt2k6t")
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/scrape/");
 // mongoose.connect("mongodb://localhost/scrape/")
 // var db = mongojs(databaseURL, collections);
 //
