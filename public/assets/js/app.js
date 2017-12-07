@@ -8,7 +8,7 @@ $.getJSON("/scrape", function(data) {
   }
 });
 
-
+// Had to do it.
 // BELOW TAKEN FROM IN CLASS EXERCISE ********************************************************
 // WILL USE ONCE DATA IS FLOWING CORRECTLY
 
