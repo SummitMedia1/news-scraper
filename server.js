@@ -7,6 +7,7 @@ var mongojs = require('mongojs');
 var mongoose = require('mongoose');
 var path = require('path');
 var request = require('request');
+var port = process.env.PORT || 3000;
 
 var Note = require('./models/note.js');
 var Article = require('./models/article.js');
@@ -107,4 +108,4 @@ app.get('/all', function(req, res) {
 });
 
 // Start express server
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(port, () => console.log('Example app listening on port' + port));
